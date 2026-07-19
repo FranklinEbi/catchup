@@ -48,6 +48,8 @@ frontend/next-env.d.ts
 backend/dist
 backend/node_modules
 backend/build
+backend/generated/prisma
+
 
 # Logs
 backend/logs
@@ -73,6 +75,7 @@ backend/.c9/
 backend/*.launch
 backend/.settings/
 backend/*.sublime-workspace
+
 
 # IDE - VSCode
 backend/.vscode/*
@@ -100,3 +103,5 @@ backend/*.pid.lock
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 backend/report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+/generated/prisma
