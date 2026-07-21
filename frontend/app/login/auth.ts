@@ -28,7 +28,7 @@ export async function login(data:LoginType){
    const {user,accessToken,refreshToken } = await response.json()
     const cookieStore = await cookies()
 
-    cookieStore.set('user',user,{
+    cookieStore.set('user',JSON.stringify(user),{
         httpOnly:true,
         secure:process.env.NODE_ENV ==='production',
         sameSite:"lax"

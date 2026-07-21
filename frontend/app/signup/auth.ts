@@ -29,7 +29,7 @@ export async function signup(data:SignUpType){
     const {user,accessToken,refreshToken } = await response.json()
         const cookieStore = await cookies()
     
-        cookieStore.set('user',user,{
+        cookieStore.set('user',JSON.stringify(user),{
             httpOnly:true,
             secure:process.env.NODE_ENV ==='production',
             sameSite:"lax"
