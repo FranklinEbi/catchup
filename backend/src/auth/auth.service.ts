@@ -26,12 +26,11 @@ export class AuthService {
         const newUser = await this.prisma.user.create({
             data:{...userFormDetails,password: hashedPassword}
         })
-        const accessToken = this.jwtService.sign({sub:newUser.id,email:newUser.email},{expiresIn:'15m'})
-        const refreshToken = this.jwtService.sign({sub:newUser.id,email:newUser.email},{expiresIn:'30d'})
+        const accessToken = this.jwtService.sign({sub:newUser.id,email:newUser.email},{expiresIn:'1d'})
         const {password, ...userWithoutPassword} = newUser
 
 
-        return {user:userWithoutPassword,accessToken,refreshToken}
+        return {user:userWithoutPassword,accessToken}
     
     }
 
@@ -54,45 +53,13 @@ export class AuthService {
             throw new BadRequestException("Invalid email or password.")
         }
 
-        const accessToken = this.jwtService.sign({sub:user.id,email:user.email},{expiresIn:'15m'})
-        const refreshToken = this.jwtService.sign({sub:user.id,email:user.email},{expiresIn:'30d'})
+        const accessToken = this.jwtService.sign({sub:user.id,email:user.email},{expiresIn:'1d'})
         const {password, ...userWithoutPassword} = user
         
-        return {user:userWithoutPassword,accessToken,refreshToken}
+        return {user:userWithoutPassword,accessToken}
 
     }
 
-    async refreshToken(refreshToken:string){
-        if(!refreshToken){
-            throw new UnauthorizedException('Unauthorized user')
-        }
-        try{
-         const verifiedToken:{sub:string,email:string} = this.jwtService.verify(refreshToken)
-         const user = await this.prisma.user.findUnique({
-             where:{
-                 id:verifiedToken.sub
-             },
-             select:{
-                id:true,
-                email:true
-             }
-         })
-         if(!user){
-            throw new UnauthorizedException('Unauthorized user')
-         } 
-         
-         
-         const accessToken = this.jwtService.sign({sub:user.id,email:user.email},{expiresIn:'15m'})
- 
-         
-         
-        }catch{
-            throw new UnauthorizedException('Unauthorized user')
-        }
-       
-
-
-    }
     
 
    
