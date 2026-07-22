@@ -9,7 +9,7 @@ export async function logout() {
 
   cookieStore.delete('user');
   cookieStore.delete('accessToken');
-  cookieStore.delete('refreshToken');
+ 
 
   redirect('/login');
 }

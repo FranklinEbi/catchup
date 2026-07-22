@@ -4,9 +4,9 @@ import { getCookies } from "../lib/getCookies";
 
 export default async function SignupPage(){
     try {
-        const { user, accessToken, refreshToken } = await getCookies();
+        const { user, accessToken } = await getCookies();
 
-        if (user && accessToken && refreshToken) {
+        if (user && accessToken) {
         redirect("/chat");
         }
     } catch {

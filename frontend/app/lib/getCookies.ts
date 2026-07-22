@@ -7,7 +7,6 @@ export async function getCookies() {
 
   const userCookie = cookieStore.get("user")?.value;
   const accessToken = cookieStore.get("accessToken")?.value ?? null;
-  const refreshToken = cookieStore.get("refreshToken")?.value ?? null;
 
   let user = null;
 
@@ -21,7 +20,6 @@ export async function getCookies() {
 
   return {
     user,
-    accessToken,
-    refreshToken,
+    accessToken
   };
 }

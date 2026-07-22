@@ -26,7 +26,7 @@ export async function signup(data:SignUpType){
         const error =await response.json()
         throw new Error(error.message)
     }
-    const {user,accessToken,refreshToken } = await response.json()
+    const {user,accessToken } = await response.json()
         const cookieStore = await cookies()
     
         cookieStore.set('user',JSON.stringify(user),{
@@ -39,12 +39,7 @@ export async function signup(data:SignUpType){
             secure:process.env.NODE_ENV ==='production',
             sameSite:"lax"
         })
-        cookieStore.set('refreshToken',refreshToken,{
-            httpOnly:true,
-            secure:process.env.NODE_ENV ==='production',
-            sameSite:"lax"
-        })
-    
+        
         redirect('/')
 
 
