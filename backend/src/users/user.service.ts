@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
@@ -13,9 +13,8 @@ export class UserService {
                 throw new UnauthorizedException("Unauthorized User")
             }
             const payload = await this.jwtService.verify(accessToken)
-            if (payload.email !== mail) {
-                 throw new UnauthorizedException("Invalid token");
-                }
+            
+           
             if(!mail){
                 throw new BadRequestException("mail of user is required")
             }
@@ -25,7 +24,7 @@ export class UserService {
                 }
             })
             if(!user){
-                throw new Error("User does not exist")
+                throw new NotFoundException("User does not exist")
             }
 
             const {id, email, username} = user

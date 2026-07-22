@@ -9,7 +9,7 @@ export class UserController {
     constructor (private readonly userService:UserService){}
 
     @Get(':email')
-    async getUser(@Req() req:Request,@Param() email:string){
+    async getUser(@Req() req:Request,@Param('email') email:string){
         const accessToken =  req.headers.authorization?.split(' ')[1]
         if(!accessToken){
             throw new UnauthorizedException('Unauthorized user')
