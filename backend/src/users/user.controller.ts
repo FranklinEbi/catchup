@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Req, UnauthorizedException } from '@nestjs/common';
+import { Controller, Get, Query, Req, UnauthorizedException,BadRequestException } from '@nestjs/common';
 import type { Request } from 'express';
 import { UserService } from './user.service';
 
@@ -8,14 +8,29 @@ import { UserService } from './user.service';
 export class UserController {
     constructor (private readonly userService:UserService){}
 
-    @Get(':email')
-    async getUser(@Req() req:Request,@Param('email') email:string){
-        const accessToken =  req.headers.authorization?.split(' ')[1]
-        if(!accessToken){
-            throw new UnauthorizedException('Unauthorized user')
-        }
-        const user = await this.userService.getUser(email,accessToken)
-        return user
+    @Get()
+    async getUser(
+    @Req() req: Request,
+    @Query('userId') userId?: string,
+    @Query('email') email?: string,
+    ) {
+    const accessToken = req.headers.authorization?.split(' ')[1];
+
+    if (!accessToken) {
+        throw new UnauthorizedException('Unauthorized user');
+    }
+
+    if (userId) {
+        return this.userService.getUserById(userId, accessToken);
+    }
+
+    if (email) {
+        return this.userService.getUserByEmail(email, accessToken);
+    }
+
+    throw new BadRequestException(
+        'Provide either userId or email',
+    );
     }
 
 }

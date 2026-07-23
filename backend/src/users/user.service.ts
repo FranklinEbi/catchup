@@ -6,17 +6,23 @@ export class UserService {
     constructor (private readonly jwtService:JwtService,
                  private readonly prisma:PrismaService
     ){}
+    private verifyAccessToken(accessToken: string) {
+        if (!accessToken) {
+            throw new UnauthorizedException('Unauthorized user');
+        }
 
-    async getUser(mail:string,accessToken:string){
+        try {
+            return this.jwtService.verify(accessToken);
+        } catch {
+            throw new UnauthorizedException('Unauthorized user');
+        }
+        }
+
+    async getUserByEmail(mail:string,accessToken:string){
         
-            if(!accessToken){
-                throw new UnauthorizedException("Unauthorized User")
-            }
-            const payload = await this.jwtService.verify(accessToken)
-            
-           
-            if(!mail){
-                throw new BadRequestException("mail of user is required")
+             this.verifyAccessToken(accessToken)
+                if(!mail){
+                    throw new BadRequestException("mail of user is required")
             }
             const user = await this.prisma.user.findUnique({
                 where:{
@@ -27,8 +33,7 @@ export class UserService {
                 throw new NotFoundException("User does not exist")
             }
 
-            const {id, email, username} = user
-            const userWithoutPassword = {id,email,username}
+            const {password, ...userWithoutPassword} = user
             return userWithoutPassword
             
 
@@ -36,5 +41,29 @@ export class UserService {
             
             
         
+        }
+
+        async getUserById(userId:string,accessToken:string){
+
+            this.verifyAccessToken(accessToken)
+            if(!userId){
+                throw new BadRequestException('User not specified')
+            }
+            
+            const user = await this.prisma.user.findUnique({
+                where:{
+                    id:userId
+                }
+            })
+            
+            if(!user){
+                throw new NotFoundException("User does not exist")
+            }
+            
+            
+            const {password, ...userWithoutPassword} = user
+            return userWithoutPassword
+            
+
         }
 }
