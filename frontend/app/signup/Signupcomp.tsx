@@ -23,8 +23,20 @@ export default function Signupcomp(){
       setError('')
       setLoading(true)
       try{
+       const correctedFields =  {
+          name:name.trim(),
+          username:username.trim(),
+          email:email.trim().toLowerCase(),
+          password:password.trim()
+
+        }
+        if (Object.values(correctedFields).some((value) => !value)) {
+          throw new Error('Please fill in all fields.');
+        }
+
+        
   
-        await signup({name,username,email,password})
+        await signup(correctedFields)
         setLoading(false)
         
       }catch(err:any){

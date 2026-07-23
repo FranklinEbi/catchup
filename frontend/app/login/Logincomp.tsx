@@ -23,12 +23,19 @@ export default function Logincomp(){
     setError('')
     setLoading(true)
     try{
-       await login({email,password})
+        const correctedMail = email.trim().toLowerCase()
+        const correctedPassword = password.trim()
+        if(!correctedMail || !correctedPassword){
+          throw new Error('Please fill in all fields.')
+        }
+       await login({email:correctedMail,password:correctedPassword})
        setLoading(false)
       
     }catch(err:any){
       setError(err.message)
+    }finally{
       setLoading(false)
+
     }
 
   }

@@ -17,7 +17,7 @@ export interface User{
 
 export default function Chat({user}:{user:User}){
     const [email,setEmail] = useState('')
-    const [fetchedUser,setFetchedUser] = useState<User|undefined>()
+    const [fetchedUser,setFetchedUser] = useState<User|null>(null)
     const [error,setError] = useState('')
     const {setReceiver} = useReceiver()
 
@@ -26,8 +26,15 @@ export default function Chat({user}:{user:User}){
         
         try{
             setError('')
-            setFetchedUser(undefined)
-            const res = await getUser(mail)
+            const trimmedMail = mail.trim().toLowerCase()
+            if (!trimmedMail) {
+              throw new Error('Email is required');
+            }
+            setFetchedUser(null)
+            if(trimmedMail ===user.email.toLowerCase()){
+              throw new Error("You can't search for yourself")
+            }
+            const res = await getUser(trimmedMail)
             setFetchedUser(res)
 
         }catch(error:any){
@@ -41,7 +48,7 @@ export default function Chat({user}:{user:User}){
       <div onClick={()=>logout()} className=" cursor-pointer self-end text-red-600 text-sm mr-2 font-medium">Logout</div>
     </div>
       <div className="flex mt-2 ">
-        <Input value={email} placeholder="Enter user's email" onChange={(e)=>setEmail(e.target.value)} className="p-4" required/>
+        <Input value={email} placeholder="Enter user's email" type="email" onChange={(e)=>setEmail(e.target.value)} className="p-4" required/>
         <Button onClick={()=>findUser(email)} className={'p-4 bg-teal-600'}>Search</Button>
       </div>
       {error && <p className="text-xs ml-1 text-red-600 font-medium">{error}</p>}
