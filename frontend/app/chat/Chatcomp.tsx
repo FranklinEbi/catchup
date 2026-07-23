@@ -2,7 +2,7 @@
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { logout } from "../lib/logout"
-import { getUser } from "../lib/getUser"
+import { getUser } from "../lib/getUserByEmail"
 import { useState } from "react"
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowRight01FreeIcons } from "@hugeicons/core-free-icons";

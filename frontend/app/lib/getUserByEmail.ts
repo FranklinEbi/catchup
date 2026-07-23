@@ -6,7 +6,7 @@ export async function getUser(email: string) {
   const { accessToken } = await getCookies();
 
   const response = await fetch(
-    `${process.env.BACKEND_URL}/user?id=${encodeURIComponent(email)}`,
+    `${process.env.BACKEND_URL}/user?email=${encodeURIComponent(email)}`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
