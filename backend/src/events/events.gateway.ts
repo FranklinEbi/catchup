@@ -4,7 +4,7 @@ import { JwtService } from "@nestjs/jwt";
 import { PayloadDTO } from "./dto/payload..dto";
 
 @WebSocketGateway({cors:{
-    origin:process.env.FRONTEND_URL?.split(','),
+    origin:["http://localhost:3000","http://172.20.10.2:3000","http://192.168.56.1:3000"],
     credentials:true
 }})
 
@@ -63,7 +63,7 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect{
 
             this.server.to(receiverSocketId).emit('message',{
                 message:payload.message,
-                receiver:payload.receiver,
+                // receiver:payload.receiver,
                 sender:client.data.user
 
             })

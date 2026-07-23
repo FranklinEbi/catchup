@@ -86,6 +86,8 @@ export default function Logincomp(){
         
       </form>
     </div>
+    <footer className="sticky bottom-0 text-xs text-muted-foreground ml-1">Created by Franklin Ebi.</footer>
+
     </div>
                 )
                 }
